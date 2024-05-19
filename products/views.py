@@ -1,68 +1,43 @@
-from django.shortcuts import redirect, render
-from .forms import ProductForm
-from .models import Category,Products
-# Create your views here.
+from itertools import product
+
+from django.shortcuts import render, redirect
+
+from .models import Category, Products
+from .forms import ProductForm,UpdateForm
 
 
-def get_info(request):
-    categories = Category.objects.all()
-    context = {
-        'categories': categories
-    }
-    return render(request, 'index.html', context=context)
-
-def get_products(request, pk):
-    products = Products.objects.filter(category=pk)
-    context = {
-        'products': products
-    }
-    return render(request, 'products.html', context=context)
-
-def detail(request, pk):
-    product = Products.objects.get(pk=pk)
-    context = {
-        'product': product
-    }
-    return render(request, 'detail.html', context=context)
+def CategoryView(request):
+    category = Category.objects.all()
+    return render(request, 'category.html', {'category': category})
 
 
-
-def add_products(request):
-    form=ProductForm(request.POST,request.FILES)
-    if form.is_valid():
-        form.save()
-        return redirect('products:get_info')
-    
-    context={
-        'form':form
-    }
-    return render(request,'create.html',context=context)
+def ProductView(request, pk):
+    product = Products.objects.filter(category=pk)
+    return render(request, 'products.html', {'product': product})
 
 
+def DetailsView(request, pk):
+    detail = Products.objects.get(pk=pk)
+    return render(request, 'details.html', {'detail': detail})
 
-def update_products(request, pk):
+
+# POST qoshish funksiyasi
+def PostView(request):
+    post = ProductForm(request.POST, request.FILES)
+    if post.is_valid():
+        post.save()
+        return redirect('category')
+    return render(request, 'post.html', {'post': post})
+
+
+# Update qilish
+def UpdateView(request, pk):
     data = Products.objects.get(pk=pk)
-    form = ProductForm(request.POST, request.FILES, instance=data)
-    if form.is_valid():
-        print(1)
-        form.save()
-        return redirect('products:get_info')
-    context = {
-        'form': form
-        }
-    return render(request, 'update.html', context=context)
-
-
-from django.shortcuts import get_object_or_404
-
-def delete_product(request, pk):
-    product = get_object_or_404(Products, pk=pk)
-    
     if request.method == 'POST':
-        product.delete()
-        return redirect('products:get_info')
-    
-    return render(request, 'delete.html', {'product': product})
-
-
-
+        update = UpdateForm(request.POST, request.FILES, instance=data)
+        if update.is_valid():
+            update.save()
+            return redirect('category')
+    else:
+        update = UpdateForm(request.POST,request.FILES,instance=data)
+    return render(request, 'update.html', {'update': update})

@@ -8,16 +8,16 @@
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
-            padding: 0;
+            padding: 10px;
         }
 
         .container {
             width: 80%;
             margin: 0 auto;
-            padding: 50px;
+            padding: 70px;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 20px;
+            border-radius: 15px;
             margin-top: 50px;
         }
 
@@ -28,7 +28,7 @@
 
         a {
             display: block;
-            margin: 10px 0;
+            margin: 10px 10px;
             padding: 30px;
             text-decoration: none;
             color: #007BFF;
@@ -48,36 +48,22 @@
             background-color: #28a745;
             color: #fff;
             text-decoration: none;
-            border-radius: 15px;
+            border-radius: 4px;
             transition: background-color 0.3s ease;
         }
 
         .add-post:hover {
             background-color: #218838;
         }
-        .back-button {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 20px;
-            background-color: #007bff;
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 10px;
-            transition: background-color 0.3s ease;
-        }
-
-        .back-button:hover {
-            background-color: #0056b3;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Player Name</h1>
-        {% for i in product %}
-            <a href="{% url 'details' i.pk %}">{{ i.name }}</a>
+        <h1>Clubs</h1>
+        {% for i in category %}
+            <a href="{% url 'product' i.pk %}">{{ i.name }}</a>
         {% endfor %}
-        <a href="{% url 'category'  %}" class="back-button">Go Back</a>
+        <a href="{% url 'post' %}" class="add-post">Add POST</a>
     </div>
 </body>
 </html>
